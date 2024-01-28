@@ -13,22 +13,122 @@
       <h2>Create Task</h2>
       <form action="/tasks" method="POST">
         <div class="form-group">
-            <label for="Title">Title:</label>
+            <label for="title">Title:</label>
             <input type="text" id="title" name="title" required />
         </div>
         <!--<div class="form-group">
             <label for="enddate">End date:</label>
             <input type="date" id="enddate" name="enddate" required>
         </div>-->
-        <button type="submit">Create Task</button>
+        <button type="submit" class="submit">Create Task</button>
       </form>
     </div>
 
     <!-- List of Tasks -->
     <div class="form-container">
         <h2>Tasks</h2>
+        <ul id="task-list">
+
+        </ul>
     </div>
-    
+    <script>
+      // Fetch tasks using JavaScript and populate the list
+      function fetchTasks() {
+        fetch('/tasks')
+            .then(response => response.json())
+            .then(tasks => {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = ''; // Clear previous tasks
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    const status = task.completed ? 'Completed' : 'Pending';
+
+                    // Show status
+                    li.textContent = `Title: ${task.title}, Status: ${status}`;
+
+                    // Edit button
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.onclick = () => editTask(task._id, task.title, task.completed);
+
+                    // Delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => deleteTask(task._id);
+
+                    li.appendChild(editButton);
+                    li.appendChild(deleteButton);
+
+                    taskList.appendChild(li);
+                });
+            })
+            .catch(error => console.error(error));
+    }
+
+    /*function editTask(taskId, title, status) {
+        const editForm = document.createElement('form');
+        editForm.innerHTML = `
+            <label for="edit-Title">New Title:</label>
+            <input type="text" id="edit-description" name="edit-description" value="${description}" required>
+            <br>
+            <label for="edit-status">Status:</label>
+            <select id="edit-status" name="edit-status">
+                <option value="true" ${completed ? 'selected' : ''}>Completed</option>
+                <option value="false" ${!completed ? 'selected' : ''}>Incomplete</option>
+            </select>
+            <br>
+            <button type="button" onclick="updateTask('${taskId}')">Update Task</button>
+        `;
+
+        // Replace the task item with the edit form
+        const taskItem = document.querySelector(`li[data-task-id="${taskId}"]`);
+        taskItem.innerHTML = '';
+        taskItem.appendChild(editForm);
+    }
+
+    function updateTask(taskId) {
+        const descriptionInput = document.getElementById('edit-description');
+        const statusSelect = document.getElementById('edit-status');
+
+        const updatedTask = {
+            description: descriptionInput.value,
+            completed: statusSelect.value === 'true'
+        };
+
+        fetch(`/tasks/${taskId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedTask)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Task updated successfully');
+                fetchTasks(); // Refresh the task list
+            } else {
+                alert('Failed to update task');
+            }
+        })
+        .catch(error => console.error(error));
+    }
+
+    function deleteTask(taskId) {
+        fetch(`/tasks/${taskId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    alert('Task deleted successfully');
+                    fetchTasks(); // Refresh the task list
+                } else {
+                    alert('Failed to delete task');
+                }
+            })
+            .catch(error => console.error(error));
+    }*/
+
+    // Fetch tasks when the page loads
+    fetchTasks();
+  </script>
 
   </body>
 </html>
