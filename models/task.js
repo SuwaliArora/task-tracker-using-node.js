@@ -23,14 +23,14 @@ const taskSchema = new mongoose.Schema({
         required: true,
         trim: true
     },*/
-    owner: { 
+    /*owner: { 
         type: mongoose.Schema.Types.ObjectId, 
         required: true, 
         ref: 'collection' 
-    }
+    }*/
     
 }, {timestamps: true})
 
-const Task = mongoose.model('Task', taskSchema);
+//const Task = mongoose.model('Task', taskSchema);
 
-module.exports = Task;
+module.exports = taskSchema;

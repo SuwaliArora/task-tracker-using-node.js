@@ -1,5 +1,9 @@
 const collection = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const verifyToken = require('../middleware/auth')
+
+const cookieExpirationTime = 3600 * 1000;
 
 // register user
 const register =  async (req, res) => {
@@ -23,10 +27,24 @@ const register =  async (req, res) => {
             const hashedPassword = await bcrypt.hash(data.password, saltrounds);
 
             data.password =hashedPassword;
-            const userdata = await collection.insertMany(data);
-            console.log(userdata);
+           // const userdata = await collection.insertMany(data);
+            //console.log(userdata);
 
-            res.send('Registration successful. <a href="/login">Login</a>');
+            //res.send('Registration successful. <a href="/login">Login</a>');
+            let registeredUser = await collection(data).save().then(_user => _user) 
+            let userID = {
+                user_Id : registeredUser.email
+            }
+            console.log("email id", userID);
+            // create a token using email id
+            let token = jwt.sign(userID , "secretkey" , {expiresIn : '3000s'});
+            console.log("token", token)
+            res.cookie("cookie created" , token , {
+                expires : new Date(Date.now() + cookieExpirationTime),
+                httpOnly : true,
+            })
+            console.log("registration successful")
+            res.status(201).render('tasks');
         }
     
         
@@ -49,6 +67,18 @@ const login =  async (req, res) => {
         // Compare the provided password with the hashed password
         const passwordMatch = await bcrypt.compare(password, checkUser.password);
         if(passwordMatch) {
+            let userID = {
+                user_Id: checkUser.email
+            }
+            // create a token using email id
+            let token = jwt.sign(userID , "secretkey" , {expiresIn : '3000s'});
+            console.log("token", token)
+
+            res.cookie("cookie created" , token , {
+                expires : new Date(Date.now() + cookieExpirationTime),
+                httpOnly : true,
+            })
+
             console.log("Login successful");
             res.render("tasks");
         } else {

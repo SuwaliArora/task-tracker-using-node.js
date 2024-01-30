@@ -7,34 +7,89 @@
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <div class="form-container">
+    <div class="form-container" id="taskForm">
       <h1>Task Manager</h1>
       <!-- Task Creation Form -->
       <h2>Create Task</h2>
-      <form action="/tasks" method="POST">
+      <form action="/task" method="POST">
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required />
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select id="status" name="status" required>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+          </select>
         </div>
         <!--<div class="form-group">
             <label for="enddate">End date:</label>
             <input type="date" id="enddate" name="enddate" required>
         </div>-->
-        <button type="submit" class="submit">Create Task</button>
+        <button type="submit" class="submit" onclick="createTask()">Create Task</button>
       </form>
     </div>
 
-    <!-- List of Tasks -->
+    <a href="/task">
+      <button>View All Details</button>
+    </a>
+
+    <!-- List of Tasks 
     <div class="form-container">
         <h2>Tasks</h2>
         <ul id="task-list">
 
         </ul>
-    </div>
+    </div>-->
     <script>
+    /*  function createTask() {
+        const title = document.getElementById("title").value;
+        const status = document.getElementById("status").value;
+
+        if (title.trim() !== "") {
+            const taskList = document.getElementById("task-list");
+            const newTask = document.createElement("li");
+            newTask.textContent = `${title} - ${status}`;
+            taskList.appendChild(newTask);
+
+            // Optionally, you can reset the form after creating a task
+            document.getElementById("taskForm").reset();
+        } else {
+            alert("Please enter a title for the task.");
+        }
+    }*/
+      function createTask() {
+        const titleInput = document.getElementById("title");
+        const statusSelect = document.getElementById('status');
+        const newTask = {
+          title: titleInput.value,
+          status: statusSelect.value,
+        };
+        fetch("/task", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTask),
+        })
+          .then((response) => {
+            if (response.ok) {
+              alert("Task created successfully");
+            } else {
+              alert("Failed to create task");
+            }
+          })
+          .catch((error) => console.error(error));
+      }
       // Fetch tasks using JavaScript and populate the list
-      function fetchTasks() {
-        fetch('/tasks')
+      /*function fetchTasks() {
+        fetch('/task' , {
+          method: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + YOUR_ACCESS_TOKEN, // Include your authentication token
+          },
+      })
             .then(response => response.json())
             .then(tasks => {
                 const taskList = document.getElementById('task-list');
