@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
-//const bcrypt = require('bcryptjs');
 const db = require('./db');
-const task = require('./models/task');
 const taskRoutes = require('./routes/taskroutes');
 const userRoutes = require('./routes/userRoutes');
 
-const app = express(); // specifies that it is a express application
+require('dotenv').config();
+
+const app = express(); 
 const port = 3000;
 // convert data into json format
 app.use(express.json());
@@ -16,7 +16,6 @@ app.set('view engine', 'ejs');
 
 // to use css files or static files
 app.use(express.static("public"));
-
 
 // routes
 app.get('/login', (req, res) => {

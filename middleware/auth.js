@@ -10,8 +10,7 @@ const verifyToken = (req , res , next) => {
             return;
         }
         let token = cookies.split('=')[1];
-        //jwt.verify(token, process.env.JWT_SECRET_KEY, (err, authdata) => {
-            jwt.verify(token, "secretkey", (err, authdata) => {
+            jwt.verify(token, process.env.SECRET_KEY, (err, authdata) => {
             if(!err) {
                 req.user = authdata.user_Id;
                 console.log({user : authdata.user_Id})

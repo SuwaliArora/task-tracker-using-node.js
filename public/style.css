@@ -42,6 +42,14 @@ input {
     border-radius: 3px;
 }
 
+#status {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
 button {
     background-color: #4caf50;
     color: #fff;
@@ -68,4 +76,61 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+
+.task-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.task-details {
+    flex-grow: 1;
+}
+
+.button-container {
+    display: flex;
+}
+
+.edit-button,
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.taskbutton {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.taskbutton button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.taskbutton button:hover {
+    background-color: #0056b3;
 }

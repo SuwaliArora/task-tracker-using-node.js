@@ -1,9 +1,8 @@
 const collection = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../middleware/auth')
 
-const cookieExpirationTime = 3600 * 1000;
+const cookieExpirationTime = 1800 * 1000; // 30min
 
 // register user
 const register =  async (req, res) => {
@@ -27,17 +26,14 @@ const register =  async (req, res) => {
             const hashedPassword = await bcrypt.hash(data.password, saltrounds);
 
             data.password =hashedPassword;
-           // const userdata = await collection.insertMany(data);
-            //console.log(userdata);
 
-            //res.send('Registration successful. <a href="/login">Login</a>');
             let registeredUser = await collection(data).save().then(_user => _user) 
             let userID = {
                 user_Id : registeredUser.email
             }
             console.log("email id", userID);
             // create a token using email id
-            let token = jwt.sign(userID , "secretkey" , {expiresIn : '3000s'});
+            let token = jwt.sign(userID , process.env.SECRET_KEY, {expiresIn : '1800000s'});
             console.log("token", token)
             res.cookie("cookie created" , token , {
                 expires : new Date(Date.now() + cookieExpirationTime),
@@ -71,7 +67,7 @@ const login =  async (req, res) => {
                 user_Id: checkUser.email
             }
             // create a token using email id
-            let token = jwt.sign(userID , "secretkey" , {expiresIn : '3000s'});
+            let token = jwt.sign(userID , process.env.SECRET_KEY , {expiresIn : '180000s'});
             console.log("token", token)
 
             res.cookie("cookie created" , token , {

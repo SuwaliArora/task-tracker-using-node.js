@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Manager - View Tasks</title>
-</head>
-<body>
-    <h1>Task Manager - View Tasks</h1>
-
-    <% if (tasks.length > 0) { %>
+    <link rel="stylesheet" href="/style1.css" />
+  </head>
+  <body>
+    <div class="form-container" id="taskForm">
+      <h1>View All Tasks</h1>
+      <div class="form-group">
+        <% if (tasks.length > 0) { %>
         <h2>Tasks</h2>
-        <ul>
-            <% tasks.forEach(task => { %>
-                <li><strong>Title:</strong> <%= task.title %>, <strong>Status:</strong> <%= task.status %></li>
-            <% }); %>
-        </ul>
-    <% } else { %>
+        <% tasks.forEach(task => { %>
+        <div class="task-container">
+          <div class="task-details">
+            <p><strong>Id:</strong><%= task.index %></p>
+            <p><strong>Title:</strong> <%= task.title %></p>
+            <p><strong>Status:</strong> <%= task.status %></p>
+            <p><strong>End date:</strong> <%= task.enddate %></p>
+          </div>
+          <div class="button-container">
+            <form action="/task/deletetask" method="post">
+              <input type="hidden" class="button" name="taskId" value="<%=task.index%>"/>
+              <input type="submit" value="Delete" />
+            </form>
+            <form action="/task/updatetask" method="post">
+              <input type="hidden" class="button" name="taskId"value="<%=task.index%>"/>
+              <input type="submit" value="Edit" />
+            </form>
+          </div>
+        </div>
+        <% }); %> 
+        <% } else { %>
         <p>No tasks available.</p>
-    <% } %>
+        <% } %>
+      </div>
+    </div>
 
-    <a href="/tasks">Create New Task</a>
-</body>
+  </body>
 </html>

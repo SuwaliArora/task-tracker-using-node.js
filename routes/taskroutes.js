@@ -3,13 +3,8 @@ const router = express.Router();
 const taskController = require('../controllers/taskController');
 const verifyToken = require('../middleware/auth')
 
-router.route('/')
-.get(verifyToken, taskController.getAllTasks)
-.post(verifyToken, taskController.createTask)
-.delete(verifyToken, taskController.deleteTask)
-.patch(verifyToken, taskController.updateTask);
-//router.route('/:id').get(taskController.getTaskById).patch(taskController.updateTask)
-
-//router.route('/createTask').post(verifyToken, taskController.createTask)
-
+router.route('/createtask').post(verifyToken, taskController.createTask)
+router.route('/viewtask').get(verifyToken, taskController.getAllTasks)
+router.route('/deletetask').post(verifyToken, taskController.deleteTask)
+router.route('/updatetask').patch(verifyToken, taskController.updateTask)
 module.exports = router;
